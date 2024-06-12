@@ -1,8 +1,8 @@
-// src/components/OptionsBox.jsx
+// src/components/formElements/OptionsBox.jsx
 import React from 'react';
 import { FaPlusCircle } from 'react-icons/fa';
 
-const OptionsBox = ({ options, onOptionChange, onAddOption }) => {
+const OptionsBox = ({ options, onOptionChange, onAddOption, hasOptionError }) => {
   return (
     <div>
       <label className="block mb-2 text-sm font-semibold text-gray-700">Options:</label>
@@ -13,15 +13,17 @@ const OptionsBox = ({ options, onOptionChange, onAddOption }) => {
               type="text"
               value={option}
               onChange={(e) => onOptionChange(index, e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full text-sm"
-              placeholder={`Option ${index + 1}`} // Use the placeholder to indicate the option number
+              className={`border p-2 rounded w-full text-sm ${
+                !option.trim() && hasOptionError ? 'border-red-500' : 'border-gray-300'
+              }`} // Highlight if the option is empty and there is an error
+              placeholder={`Option ${index + 1}`}
             />
           </div>
         ))}
       </div>
       <div className="flex justify-center">
         <button
-          onClick={onAddOption}
+          onClick={() => onAddOption('')}
           className="text-blue-500 hover:text-blue-600 transition-colors duration-200 ease-in-out"
           aria-label="Add option"
         >
