@@ -1,7 +1,9 @@
 // src/App.jsx
 import React, { useState } from 'react';
-import ToolBox from './components/ToolBox';
-import DropZone from './components/DropZone';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import ToolBox from './components/formElements/ToolBox';
+import DropZone from './components/layout/DropZone';
 
 const App = () => {
   const [droppedItems, setDroppedItems] = useState([]);
@@ -13,28 +15,22 @@ const App = () => {
     { type: 'Checkbox', label: 'Checkbox' },
   ];
 
-  const handleDragStart = (e, type) => {
-    e.dataTransfer.setData('type', type);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const type = e.dataTransfer.getData('type');
-    setDroppedItems((prevItems) => [
-      ...prevItems,
-      { type, label: `${type} ${prevItems.length + 1}` },
-    ]);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
+  const handleDrop = (item) => {
+    const newItem = {
+      type: item.type,
+      label: `${item.type} ${droppedItems.length + 1}`,
+      id: new Date().getTime(), // Generate a unique id
+    };
+    setDroppedItems((prevItems) => [...prevItems, newItem]);
   };
 
   return (
-    <div className="flex h-screen p-4 space-x-4">
-      <ToolBox items={toolItems} onDragStart={handleDragStart} />
-      <DropZone items={droppedItems} setItems={setDroppedItems} onDrop={handleDrop} onDragOver={handleDragOver} />
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex h-screen p-4 space-x-4">
+        <ToolBox items={toolItems} />
+        <DropZone items={droppedItems} setItems={setDroppedItems} onDrop={handleDrop} />
+      </div>
+    </DndProvider>
   );
 };
 
