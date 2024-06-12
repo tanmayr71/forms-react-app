@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import DraggableItem from './DraggableItem';
 import { useDrop } from 'react-dnd';
+import { saveAs } from 'file-saver';
 
 const DropZone = ({ items, setItems, onDrop }) => {
   const [draggingIndex, setDraggingIndex] = useState(null);
@@ -44,6 +45,9 @@ const DropZone = ({ items, setItems, onDrop }) => {
           label: '', // Set new items with a blank label
           id: new Date().getTime(), // Generate a unique id
           options: [''], // Initialize with one empty option
+          isRequired: false, // Initialize as not required
+          defaultValue: '', // Initialize with empty default value
+          validationType: 'String', // Default validation type for text fields
         };
         // Insert the new item at the dropIndex position
         const updatedItems = [...items];
@@ -93,6 +97,27 @@ const DropZone = ({ items, setItems, onDrop }) => {
     setItems(newItems);
   };
 
+  const handleRequiredChange = (index, isRequired) => {
+    const newItems = items.map((item, i) =>
+      i === index ? { ...item, isRequired } : item
+    );
+    setItems(newItems);
+  };
+
+  const handleDefaultChange = (index, defaultValue) => {
+    const newItems = items.map((item, i) =>
+      i === index ? { ...item, defaultValue } : item
+    );
+    setItems(newItems);
+  };
+
+  const handleValidationChange = (index, validationType) => {
+    const newItems = items.map((item, i) =>
+      i === index ? { ...item, validationType } : item
+    );
+    setItems(newItems);
+  };
+
   // Validate all fields before saving
   const validateForm = () => {
     const labelErrors = [];
@@ -123,8 +148,48 @@ const DropZone = ({ items, setItems, onDrop }) => {
   const handleSaveForm = () => {
     if (validateForm()) {
       setShowError(false);
-      // Proceed with form save logic
-      console.log('Form saved successfully!'); // Replace this with your save logic
+  
+      // Create the schema object
+      const formSchema = {
+        formElements: items.map(item => {
+          // Base schema for all elements
+          const elementSchema = {
+            type: item.type,
+            label: item.label,
+          };
+
+          // Conditionally add fields based on the type of element
+          if (item.isRequired !== undefined) {
+            elementSchema.isRequired = item.isRequired;
+          }
+          
+          if (['Dropdown', 'Checkbox', 'Radio'].includes(item.type)) {
+            elementSchema.options = item.options || [];
+          }
+          
+          if (item.type === 'Dropdown' && item.defaultValue !== undefined) {
+            elementSchema.defaultValue = item.defaultValue;
+          }
+
+          // Include validationType for TextBox
+          if (item.type === 'TextBox' && item.validationType !== undefined) {
+            elementSchema.validationType = item.validationType;
+          }
+
+          return elementSchema;
+        }),
+      };
+  
+      // Convert the schema object to a JSON string
+      const schemaJson = JSON.stringify(formSchema, null, 2);
+  
+      // Create a blob from the JSON string
+      const blob = new Blob([schemaJson], { type: 'application/json' });
+  
+      // Use the file-saver library to save the file
+      saveAs(blob, 'outputs/form-schema.json');
+  
+      console.log('Form saved successfully!', formSchema); // Replace this with your save logic
     } else {
       setShowError(true);
       // Hide error message after 15 seconds
@@ -138,11 +203,14 @@ const DropZone = ({ items, setItems, onDrop }) => {
       ref={drop}
     >
       <div className="mb-4 flex justify-end">
-        <button
-          onClick={handleSaveForm}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-        >
-          Save Form
+
+          <button
+            onClick={handleSaveForm}
+            className={`px-4 py-2 rounded-lg shadow-md transition duration-200 
+                        ${items.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+            disabled={items.length === 0} // Disable button if drop zone is empty
+          >
+            Save Form
         </button>
       </div>
 
@@ -166,11 +234,17 @@ const DropZone = ({ items, setItems, onDrop }) => {
                 type={item.type}
                 label={item.label || ''}
                 options={item.options || []} // Pass options for validation
+                isRequired={item.isRequired} // Pass isRequired for validation
+                defaultValue={item.defaultValue} // Pass default value for validation
+                validationType={item.validationType} // Pass validation type for TextBox
                 hasLabelError={errorIndices.includes(index)} // Highlight if there's a label error
                 hasOptionError={optionErrorIndices.includes(index)} // Highlight if there's an option error
                 onDelete={() => handleDelete(index)}
                 onLabelChange={(newLabel) => handleLabelChange(index, newLabel)}
                 onOptionsChange={(newOptions) => handleOptionsChange(index, newOptions)} // Handle options change
+                onRequiredChange={(isRequired) => handleRequiredChange(index, isRequired)} // Handle isRequired change
+                onDefaultChange={(newDefault) => handleDefaultChange(index, newDefault)} // Handle default value change
+                onValidationChange={(newValidationType) => handleValidationChange(index, newValidationType)} // Handle validation type change
                 moveItem={moveItem}
               />
             )}
@@ -178,11 +252,11 @@ const DropZone = ({ items, setItems, onDrop }) => {
         ))
       )}
 
-      {isOverNewItem && placeholderIndex === items.length && (
-        <div className="h-16 border-2 border-dashed border-blue-300 rounded my-2"></div>
-      )}
-    </div>
-  );
+    {isOverNewItem && placeholderIndex === items.length && (
+    <div className="h-16 border-2 border-dashed border-blue-300 rounded my-2"></div>
+    )}
+  </div>
+);
 };
 
 export default DropZone;

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import ToolBox from './components/formElements/ToolBox';
+import ToolBox from './components/ToolBoxComponents/ToolBox';
 import DropZone from './components/layout/DropZone';
 
 const App = () => {
@@ -26,7 +26,7 @@ const App = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex h-screen p-4 space-x-4">
+      <div className="flex h-screen p-4 space-x-4 bg-gray-100">
         <ToolBox items={toolItems} />
         <DropZone items={droppedItems} setItems={setDroppedItems} onDrop={handleDrop} />
       </div>
