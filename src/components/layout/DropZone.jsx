@@ -187,7 +187,7 @@ const DropZone = ({ items, setItems, onDrop }) => {
       const blob = new Blob([schemaJson], { type: 'application/json' });
   
       // Use the file-saver library to save the file
-      saveAs(blob, 'outputs/form-schema.json');
+      saveAs(blob, 'form-schema.json');
   
       console.log('Form saved successfully!', formSchema); // Replace this with your save logic
     } else {
