@@ -1,6 +1,11 @@
 // src/components/FormViewer.jsx
 import React, { useState, useEffect } from 'react';
 import { saveAs } from 'file-saver';
+import { validateInput } from '../utils/validation';
+import TextBox from './formElements/TextBox';
+import RadioGroup from './formElements/RadioGroup';
+import Dropdown from './formElements/Dropdown';
+import CheckboxGroup from './formElements/CheckboxGroup';
 
 const FormViewer = () => {
   const [formSchema, setFormSchema] = useState(null);
@@ -36,17 +41,19 @@ const FormViewer = () => {
     setFormValues(initialValues);
   };
 
-  const handleInputChange = (label, value) => {
+  const handleInputChange = (label, value, validationType) => {
     setFormValues((prevValues) => ({
       ...prevValues,
       [label]: value,
     }));
-    if (value) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        [label]: false,
-      }));
-    }
+
+    // Validate the input based on the validation type
+    const { isValid, message } = validateInput(value, validationType);
+
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [label]: !isValid ? message : false,
+    }));
   };
 
   const handleCheckboxChange = (label, option) => {
@@ -55,8 +62,15 @@ const FormViewer = () => {
       const newValues = currentValues.includes(option)
         ? currentValues.filter((v) => v !== option)
         : [...currentValues, option];
+      
       return { ...prevValues, [label]: newValues };
     });
+
+    // Perform validation immediately after updating the state
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [label]: false, // Clear any previous error since we rely on the '*' indication now
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -65,111 +79,31 @@ const FormViewer = () => {
 
     formSchema.formElements.forEach((element) => {
       const value = formValues[element.label];
+      const { isValid } = validateInput(value, element.validationType);
+
       if (element.isRequired && (!value || (Array.isArray(value) && value.length === 0))) {
-        errors[element.label] = true;
+        errors[element.label] = true; // Simplified to a boolean for showing general errors
+      } else if (!isValid) {
+        const { message } = validateInput(value, element.validationType);
+        errors[element.label] = message;
       }
     });
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       setShowError(true);
-      setTimeout(() => setShowError(false), 5000);
+      setTimeout(() => setShowError(false), 15000);
     } else {
-        console.log('Form submitted successfully!', formValues);
+      console.log('Form submitted successfully!', formValues);
 
-        // Convert form values to a JSON string
-        const formDataJson = JSON.stringify(formValues, null, 2);
-    
-        // Create a Blob from the JSON string
-        const blob = new Blob([formDataJson], { type: 'application/json' });
-    
-        // Use file-saver to save the file
-        saveAs(blob, 'outputs/form-data.json');
-    }
-  };
+      // Convert form values to a JSON string
+      const formDataJson = JSON.stringify(formValues, null, 2);
 
-  const renderFormElement = (element) => {
-    const error = formErrors[element.label];
-    const commonProps = {
-      className: `border p-2 rounded w-full ${error ? 'border-red-500' : 'border-gray-300'}`,
-      value: formValues[element.label],
-      onChange: (e) => handleInputChange(element.label, e.target.value),
-      required: element.isRequired,
-    };
+      // Create a Blob from the JSON string
+      const blob = new Blob([formDataJson], { type: 'application/json' });
 
-    switch (element.type) {
-      case 'TextBox':
-        return (
-          <div key={element.label} className="mb-4">
-            <label className="block mb-2 text-sm font-semibold text-gray-700">
-              {element.label}
-            </label>
-            <input type="text" {...commonProps} />
-          </div>
-        );
-      case 'Radio':
-        return (
-          <div key={element.label} className="mb-4">
-            <label className="block mb-2 text-sm font-semibold text-gray-700">
-              {element.label}
-            </label>
-            {element.options.map((option, index) => (
-              <div key={index} className="flex items-center mb-1">
-                <input
-                  type="radio"
-                  name={element.label}
-                  value={option}
-                  className="mr-2"
-                  checked={formValues[element.label] === option}
-                  onChange={() => handleInputChange(element.label, option)}
-                  required={element.isRequired}
-                />
-                <span>{option}</span>
-              </div>
-            ))}
-          </div>
-        );
-      case 'Dropdown':
-        return (
-          <div key={element.label} className="mb-4">
-            <label className="block mb-2 text-sm font-semibold text-gray-700">
-              {element.label}
-            </label>
-            <select {...commonProps}>
-              <option value="" disabled hidden>
-                Select an option
-              </option>
-              {element.options.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-        );
-      case 'Checkbox':
-        return (
-          <div key={element.label} className="mb-4">
-            <label className="block mb-2 text-sm font-semibold text-gray-700">
-              {element.label}
-            </label>
-            {element.options.map((option, index) => (
-              <div key={index} className="flex items-center mb-1">
-                <input
-                  type="checkbox"
-                  value={option}
-                  className="mr-2"
-                  checked={formValues[element.label]?.includes(option)}
-                  onChange={() => handleCheckboxChange(element.label, option)}
-                  required={element.isRequired}
-                />
-                <span>{option}</span>
-              </div>
-            ))}
-          </div>
-        );
-      default:
-        return null;
+      // Use file-saver to save the file
+      saveAs(blob, 'outputs/form-data.json');
     }
   };
 
@@ -180,13 +114,70 @@ const FormViewer = () => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md max-w-lg mx-auto">
       <h1 className="text-2xl font-bold mb-4">Form Viewer</h1>
-      {showError && (
-        <div className="mb-4 p-3 bg-red-100 text-red-800 border border-red-300 rounded shadow-md">
-          Please fill all required fields.
-        </div>
-      )}
+      <p className="mb-4 text-sm text-gray-600">
+        Fields marked with <span className="text-red-500">*</span> are required.
+      </p>
       <form onSubmit={handleSubmit}>
-        {formSchema.formElements.map((element) => renderFormElement(element))}
+        {formSchema.formElements.map((element) => {
+          const labelWithAsterisk = element.isRequired ? `${element.label} *` : element.label;
+          switch (element.type) {
+            case 'TextBox':
+              return (
+                <TextBox
+                  key={element.label}
+                  label={labelWithAsterisk}
+                  value={formValues[element.label] || ''}
+                  isRequired={element.isRequired}
+                  validationType={element.validationType}
+                  error={formErrors[element.label]}
+                  onChange={(value) => handleInputChange(element.label, value, element.validationType)}
+                />
+              );
+            case 'Radio':
+              return (
+                <RadioGroup
+                  key={element.label}
+                  label={labelWithAsterisk}
+                  options={element.options}
+                  value={formValues[element.label] || ''}
+                  isRequired={element.isRequired}
+                  error={formErrors[element.label]}
+                  onChange={(value) => handleInputChange(element.label, value)}
+                />
+              );
+            case 'Dropdown':
+              return (
+                <Dropdown
+                  key={element.label}
+                  label={labelWithAsterisk}
+                  options={element.options}
+                  value={formValues[element.label] || ''}
+                  isRequired={element.isRequired}
+                  error={formErrors[element.label]}
+                  onChange={(value) => handleInputChange(element.label, value)}
+                />
+              );
+            case 'Checkbox':
+              return (
+                <CheckboxGroup
+                  key={element.label}
+                  label={labelWithAsterisk}
+                  options={element.options}
+                  values={formValues[element.label] || []}
+                  isRequired={element.isRequired}
+                  error={formErrors[element.label]}
+                  onChange={(option) => handleCheckboxChange(element.label, option)}
+                />
+              );
+            default:
+              return null;
+          }
+        })}
+        {showError && (
+          <div className="mb-4 p-3 bg-red-100 text-red-800 border border-red-300 rounded shadow-md">
+            Please fill all required fields and correct the highlighted errors.
+          </div>
+        )}
         <button
           type="submit"
           className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200"

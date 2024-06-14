@@ -1,20 +1,9 @@
-// src/components/TextBoxCard.jsx
+// src/components/cards/TextBoxCard.jsx
 import React from 'react';
 import RequiredCheckbox from '../formElements/RequiredCheckbox';
+import { validationOptions } from '../../utils/validation'; // Import the validation options
 
 const TextBoxCard = ({ isRequired, onRequiredChange, validationType, onValidationChange }) => {
-  const validationOptions = [
-    'String',
-    'Password',
-    'Number',
-    'Phone Number',
-    'Short Date',
-    'TimeStamp',
-    'Boolean',
-    'Integer',
-    'Decimal',
-  ];
-
   return (
     <div className="p-3 bg-white border border-gray-300 rounded-lg shadow-sm space-y-3">
       <div className="mt-2">
