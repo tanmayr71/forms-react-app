@@ -1,0 +1,104 @@
+.dropzone-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem;
+    background: linear-gradient(to bottom right, #bbdefb, #b39ddb); /* Gradient matching the Navbar */
+    border: 2px dashed #7e57c2; /* Soft purple border */
+    border-radius: 1rem; /* More rounded corners */
+    width: 75%; /* 3/4 width */
+    box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.1), 0 6px 12px -2px rgba(0, 0, 0, 0.05); /* Enhanced shadow for depth */
+    overflow-y: auto; /* Enables vertical scrolling */
+    max-height: 100%; /* Ensure it doesn't grow beyond the container */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.dropzone-container:hover {
+    transform: translateY(-5px); /* Slight lift effect on hover */
+    box-shadow: 0 15px 25px -3px rgba(0, 0, 0, 0.1), 0 10px 20px -2px rgba(0, 0, 0, 0.05); /* Stronger shadow */
+}
+
+/* New styles for top controls */
+.top-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem; /* Space below controls */
+}
+
+.save-button {
+    padding: 0.75rem 1.5rem; /* Increased padding for better touch area */
+    border-radius: 1rem; /* More rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s ease; /* Smooth transitions */
+    font-weight: bold; /* Bold text for emphasis */
+    display: flex; /* Align icon and text */
+    align-items: center; /* Center icon and text vertically */
+    justify-content: center; /* Center icon and text horizontally */
+    width: 200px; /* Fixed width for consistency */
+    margin-bottom: 0.5rem; /* Space between button and error message */
+    background: linear-gradient(to right, #7b1fa2, #512da8); /* Gradient background */
+    color: white; /* White text color */
+    border: 1px solid #673ab7; /* Subtle border to match the theme */
+    cursor: pointer;
+}
+
+.save-button-enabled {
+    background: linear-gradient(to right, #673ab7, #512da8); /* Initial gradient */
+    color: white;
+}
+
+.save-button-enabled:hover {
+    background: linear-gradient(to right, #512da8, #7b1fa2); /* Reversed gradient on hover */
+    transform: translateY(-3px); /* Slight lift effect on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.save-button-disabled {
+    background: linear-gradient(to right, #e0e0e0, #bdbdbd); /* Light gradient for disabled state */
+    color: #757575; /* Slightly darker gray for text to contrast with the background */
+    cursor: not-allowed;
+    border: 1px solid #9e9e9e; /* Subtle border to differentiate the disabled state */
+}
+
+.error-message {
+    padding: 0.75rem; /* p-3 */
+    background-color: #ffebee; /* Matches red-100 but lighter */
+    color: #b91c1c; /* Matches red-800 */
+    border: 1px solid #fecaca; /* Matches border-red-300 */
+    border-radius: 0.375rem; /* Rounded corners */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+    transition: opacity 0.5s ease-in-out; /* transition-opacity */
+    margin-bottom: 1rem; /* Space below error message */
+}
+
+.placeholder {
+    height: 4rem; /* h-16 */
+    border: 2px dashed #7e57c2; /* Matches border color */
+    border-radius: 0.5rem; /* Rounded corners */
+    margin: 0.5rem 0; /* Margin on top and bottom */
+    background-color: rgba(142, 87, 194, 0.1); /* Light purple background for placeholder */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7e57c2; /* Placeholder text color */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.empty-message {
+    font-size: 1.2rem; /* Slightly larger for prominence */
+    font-weight: 500; /* Medium weight */
+    color: #4a5568; /* Dark gray color for better visibility */
+    text-align: center; /* Centered text */
+    margin-top: 2rem; /* Space above the message */
+    padding: 0.75rem; /* Padding around the text for a bit of spacing */
+    border-radius: 0.375rem; /* Rounded corners to soften the edges */
+    width: 100%; /* Take full width available */
+    max-width: 400px; /* Limit width for better readability */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+    /* border: 1px dashed #cbd5e0; Light gray dashed border for a subtle box */
+    /* background-color: rgba(123, 31, 162, 0.05); Very light background color for subtle emphasis */
+}

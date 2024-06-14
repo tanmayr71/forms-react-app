@@ -6,6 +6,7 @@ import TextBox from './formElements/TextBox';
 import RadioGroup from './formElements/RadioGroup';
 import Dropdown from './formElements/Dropdown';
 import CheckboxGroup from './formElements/CheckboxGroup';
+import '../styles/FormViewer.css'; // Import the CSS for styling
 
 const FormViewer = () => {
   const [formSchema, setFormSchema] = useState(null);
@@ -112,12 +113,12 @@ const FormViewer = () => {
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Form Viewer</h1>
-      <p className="mb-4 text-sm text-gray-600">
-        Fields marked with <span className="text-red-500">*</span> are required.
+    <div className="form-viewer-container">
+      <h1 className="form-viewer-title">Form Viewer</h1>
+      <p className="form-viewer-instruction">
+        Fields marked with <span className="required-asterisk">*</span> are required.
       </p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="form-viewer-form">
         {formSchema.formElements.map((element) => {
           const labelWithAsterisk = element.isRequired ? `${element.label} *` : element.label;
           switch (element.type) {
@@ -174,13 +175,13 @@ const FormViewer = () => {
           }
         })}
         {showError && (
-          <div className="mb-4 p-3 bg-red-100 text-red-800 border border-red-300 rounded shadow-md">
+          <div className="form-viewer-error">
             Please fill all required fields and correct the highlighted errors.
           </div>
         )}
         <button
           type="submit"
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+          className="form-viewer-submit-button"
         >
           Submit
         </button>

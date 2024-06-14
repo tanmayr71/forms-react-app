@@ -1,0 +1,78 @@
+/* src/styles/OptionsBox.css */
+
+.options-box-container {
+    margin-bottom: 1rem; /* Matches the spacing below the label */
+  }
+  
+  .options-box-label {
+    display: block;
+    margin-bottom: 0.5rem; /* Matches mb-2 */
+    font-size: 0.875rem; /* Matches text-sm */
+    font-weight: 600; /* Matches font-semibold */
+    color: #4a5568; /* Matches text-gray-700 */
+    background: linear-gradient(to right, #ebf8ff, #e0e7ff); /* Gradient background */
+    padding: 0.5rem 0.75rem; /* Padding for enhanced spacing */
+    border-radius: 0.375rem; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .options-list {
+    margin-bottom: 0.75rem; /* Matches mb-3 */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Space between each option */
+  }
+  
+  .option-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .option-input {
+    border: 1px solid #cbd5e0; /* Light blue-gray border */
+    padding: 0.5rem;
+    border-radius: 0.375rem; /* Rounded corners */
+    width: 100%;
+    font-size: 0.875rem; /* Matches text-sm */
+    color: #4a5568; /* Dark gray text */
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Smooth transition */
+  }
+  
+  .option-input-error {
+    border-color: #f87171; /* Softer red border for error */
+    box-shadow: 0 0 0 1px #f87171; /* Red shadow on error */
+  }
+  
+  .add-option-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem; /* Added margin to separate from options */
+}
+
+.add-option-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff; /* White text */
+    background: linear-gradient(to right, #6b5b95, #48487d); /* Sleek purple gradient background */
+    border: none;
+    border-radius: 50%; /* Circular button */
+    width: 2rem; /* Smaller width for a sleeker look */
+    height: 2rem; /* Smaller height for a sleeker look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06); /* Subtle shadow */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition */
+    cursor: pointer; /* Pointer cursor for interactive element */
+}
+
+.add-option-button:hover {
+    transform: scale(1.1); /* Slightly enlarge icon on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06); /* Stronger shadow on hover */
+}
+
+.add-option-icon {
+    height: 1.25rem; /* Smaller icon for sleek look */
+    width: 1.25rem;
+    color: white; /* Icon color should be white to match the button */
+}

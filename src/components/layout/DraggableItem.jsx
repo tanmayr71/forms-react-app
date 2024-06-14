@@ -1,3 +1,4 @@
+// src/components/layout/DraggableItem.jsx
 import React, { useRef, useState, useEffect } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { FaRegTimesCircle } from 'react-icons/fa'; // Import macOS-like close icon
@@ -5,6 +6,7 @@ import TextBoxCard from '../cards/TextBoxCard';
 import RadioButtonCard from '../cards/RadioButtonCard';
 import CheckboxCard from '../cards/CheckboxCard';
 import DropdownCard from '../cards/DropdownCard';
+import '../../styles/DraggableItem.css'; // Import the styles
 
 const DraggableItem = ({
   type,
@@ -116,24 +118,23 @@ const DraggableItem = ({
   return (
     <div
       ref={ref}
-      className={`relative m-2 p-4 border rounded bg-white shadow-sm ${
-        isDragging ? 'opacity-80 bg-blue-100' : 'opacity-100'
-      } ${hasLabelError ? 'border-red-500' : 'border-gray-300'}`} // Highlight if there's a label error
+      className={`draggable-item ${isDragging ? 'dragging' : ''} ${
+        hasLabelError ? 'has-error' : ''
+      }`}
     >
       {/* New Row for Delete Button */}
       <div className="flex justify-end items-center mb-1">
         <button
           onClick={onDelete}
-          className="text-gray-500 hover:text-red-500 transition-all duration-200 ease-in-out"
+          className="delete-button"
           aria-label="Delete"
-          style={{ width: '24px', height: '24px', padding: '4px' }} // Adjust size, padding
         >
           <FaRegTimesCircle className="h-full w-full" />
         </button>
       </div>
       <div className="flex items-center mb-2">
         {/* Order number display */}
-        <div className="mr-2 text-lg font-semibold text-gray-700 flex-shrink-0 flex items-center justify-center" style={{ minWidth: '24px', height: '40px' }}>
+        <div className="order-number">
           {index + 1}
         </div>
         <div className="flex-grow">
@@ -141,13 +142,10 @@ const DraggableItem = ({
             type="text"
             value={editableLabel}
             onChange={handleLabelChange}
-            className={`text-sm font-medium text-gray-700 border p-2 rounded w-full ${
-              hasLabelError ? 'border-red-500' : ''
-            }`} // Highlight if there's a label error
+            className={`label-input ${hasLabelError ? 'has-error' : ''}`}
             placeholder="Enter heading here"
-            style={{ height: '40px' }} // Match the height of number and delete button
           />
-          <div className="text-xs text-gray-500 mt-1">Type: {type}</div>
+          <div className="label-type">Type: {type}</div>
         </div>
       </div>
       {Component && (

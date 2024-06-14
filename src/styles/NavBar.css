@@ -1,0 +1,60 @@
+/* src/components/NavBar.css */
+
+.nav-container {
+    padding: 1rem 2rem;
+    background: linear-gradient(to bottom right, #bbdefb, #b39ddb); /* Matching gradient colors */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 70px;
+    border-bottom: 2px solid #cbd5e0; /* Subtle border for distinction */
+    border-radius: 0.5rem; /* Rounding to match the ToolBox style */
+  }
+  
+  .nav-logo-title {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-logo {
+    height: 50px; /* Slightly larger for better visibility */
+    width: auto; /* Keep the aspect ratio intact */
+    margin-right: 1rem; /* Space between logo and title */
+  }
+  
+  .nav-title {
+    font-size: 1.8rem; /* Slightly larger for emphasis */
+    font-weight: bold;
+    color: #1a202c; /* Dark color for better contrast */
+    font-family: 'Helvetica Neue', sans-serif; /* Professional font */
+    letter-spacing: 0.05em; /* Slight spacing for readability */
+    text-transform: uppercase; /* Make the title uppercase for impact */
+    background: -webkit-linear-gradient(#9c27b0, #673ab7); /* Gradient text */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 1.5rem; /* Space between links */
+  }
+  
+  .nav-link {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #1a202c; /* Dark color to match the title */
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .nav-link:hover {
+    background-color: #e2e8f0; /* Light hover effect */
+    transform: translateY(-2px);
+  }
+  
+  .nav-icon {
+    margin-right: 0.5rem;
+  }

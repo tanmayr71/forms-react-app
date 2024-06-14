@@ -1,0 +1,26 @@
+/* src/styles/ToolBoxItem.css */
+
+.toolbox-item {
+    padding: 0.75rem; /* Padding for the item */
+    background-color: #ffffff; /* White background */
+    border: 1px solid #cbd5e0; /* Light gray border */
+    border-radius: 0.5rem; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Subtle shadow */
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.3s ease; /* Smooth transitions */
+  }
+  
+  .toolbox-item:hover {
+    background: linear-gradient(to bottom right, #bbdefb, #b39ddb); /* Gradient background on hover */
+    border-color: #7e57c2; /* Soft purple border on hover */
+    transform: translateY(-0.5px); /* Lift effect on hover */
+    box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.1), 0 4px 8px -1px rgba(0, 0, 0, 0.05); /* Stronger shadow on hover */
+  }
+  
+  .toolbox-item-label {
+    font-size: 1rem; /* Larger text for better readability */
+    font-weight: 600; /* Semi-bold for emphasis */
+    color: #3c366b; /* Darker shade for contrast */
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Clean and professional font family */
+    letter-spacing: 0.03em; /* Slight spacing for readability */
+  }

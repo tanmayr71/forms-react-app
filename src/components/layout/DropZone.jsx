@@ -1,8 +1,9 @@
-// src/components/layout/DropZone.jsx
 import React, { useState } from 'react';
 import DraggableItem from './DraggableItem';
 import { useDrop } from 'react-dnd';
 import { saveAs } from 'file-saver';
+import '../../styles/DropZone.css'; // Import the CSS file
+import { FaSave } from 'react-icons/fa';
 
 const DropZone = ({ items, setItems, onDrop }) => {
   const [draggingIndex, setDraggingIndex] = useState(null);
@@ -198,65 +199,59 @@ const DropZone = ({ items, setItems, onDrop }) => {
   };
 
   return (
-    <div
-      className="relative flex flex-col h-full p-4 bg-gray-50 border-2 border-dashed border-blue-300 rounded-lg w-3/4 shadow-lg overflow-y-auto max-h-full"
-      ref={drop}
-    >
-      <div className="mb-4 flex justify-end">
-
-          <button
-            onClick={handleSaveForm}
-            className={`px-4 py-2 rounded-lg shadow-md transition duration-200 
-                        ${items.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
-            disabled={items.length === 0} // Disable button if drop zone is empty
-          >
-            Save Form
+    <div className="dropzone-container" ref={drop}>
+      <div className="top-controls">
+        {/* Use className to apply the disabled class only when needed */}
+        <button
+          onClick={handleSaveForm}
+          className={`save-button ${items.length === 0 ? 'save-button-disabled' : 'save-button-enabled'}`}
+          disabled={items.length === 0} // Disable button if drop zone is empty
+        >
+          <FaSave className="mr-2" /> {/* Add the icon with some right margin */}
+          Save Form
         </button>
+        {showError && (
+          <div className="error-message">
+            All fields must be filled. Please correct the highlighted fields.
+          </div>
+        )}
       </div>
-
-      {showError && (
-        <div className="mb-4 p-3 bg-red-100 text-red-800 border border-red-300 rounded shadow-md transition-opacity duration-500 ease-in-out">
-          All fields must be filled. Please correct the highlighted fields.
-        </div>
-      )}
-
+  
       {items.length === 0 && !isOverNewItem ? (
-        <p className="text-gray-500 text-center mt-8">Drag items here</p>
+        <p className="empty-message">Drag items here</p>
       ) : (
         items.map((item, index) => (
           <div key={item?.id || index} data-drop-item={index} className="relative">
-            {index === placeholderIndex && (
-              <div className="h-16 border-2 border-dashed border-blue-300 rounded my-2"></div>
-            )}
+            {index === placeholderIndex && <div className="placeholder"></div>}
             {item && item.type && (
               <DraggableItem
                 index={index}
                 type={item.type}
                 label={item.label || ''}
-                options={item.options || []} // Pass options for validation
-                isRequired={item.isRequired} // Pass isRequired for validation
-                defaultValue={item.defaultValue} // Pass default value for validation
-                validationType={item.validationType} // Pass validation type for TextBox
-                hasLabelError={errorIndices.includes(index)} // Highlight if there's a label error
-                hasOptionError={optionErrorIndices.includes(index)} // Highlight if there's an option error
+                options={item.options || []}
+                isRequired={item.isRequired}
+                defaultValue={item.defaultValue}
+                validationType={item.validationType}
+                hasLabelError={errorIndices.includes(index)}
+                hasOptionError={optionErrorIndices.includes(index)}
                 onDelete={() => handleDelete(index)}
                 onLabelChange={(newLabel) => handleLabelChange(index, newLabel)}
-                onOptionsChange={(newOptions) => handleOptionsChange(index, newOptions)} // Handle options change
-                onRequiredChange={(isRequired) => handleRequiredChange(index, isRequired)} // Handle isRequired change
-                onDefaultChange={(newDefault) => handleDefaultChange(index, newDefault)} // Handle default value change
-                onValidationChange={(newValidationType) => handleValidationChange(index, newValidationType)} // Handle validation type change
+                onOptionsChange={(newOptions) => handleOptionsChange(index, newOptions)}
+                onRequiredChange={(isRequired) => handleRequiredChange(index, isRequired)}
+                onDefaultChange={(newDefault) => handleDefaultChange(index, newDefault)}
+                onValidationChange={(newValidationType) => handleValidationChange(index, newValidationType)}
                 moveItem={moveItem}
               />
             )}
           </div>
         ))
       )}
-
-    {isOverNewItem && placeholderIndex === items.length && (
-    <div className="h-16 border-2 border-dashed border-blue-300 rounded my-2"></div>
-    )}
-  </div>
-);
+  
+      {isOverNewItem && placeholderIndex === items.length && (
+        <div className="placeholder"></div>
+      )}
+    </div>
+  );
 };
 
 export default DropZone;
