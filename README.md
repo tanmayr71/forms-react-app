@@ -5,6 +5,10 @@
 
 The Forms React App is a dynamic and interactive form builder that allows users to create custom forms with drag-and-drop functionality. This application enables you to add, reorder, and validate form elements, providing an intuitive way to design forms without coding.
 
+<img width="1470" alt="Screenshot 2024-06-16 at 12 27 27 PM" src="https://github.com/tanmayr71/forms-react-app/assets/55703966/3e62eea6-f2d5-4f91-a3a1-a7a3b9482577">
+<img width="1470" alt="Screenshot 2024-06-16 at 12 29 24 PM" src="https://github.com/tanmayr71/forms-react-app/assets/55703966/5473802a-d48f-4a84-8464-b1d50e48b342">
+
+
 ## Features
 
 - **Drag-and-Drop Interface**: Easily drag form elements into the form area and reorder them as needed.
